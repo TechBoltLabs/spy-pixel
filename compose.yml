@@ -1,0 +1,22 @@
+version: '3'
+services:
+  spy-pixel-flaskapp:
+    image: spy-pixel-flaskapp:v0.5
+    networks:
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.spy-pixel.rule=Host(`p.s-akabay.de`)"
+      - "traefik.http.routers.spy-pixel.entrypoints=web,websecure"
+      - "traefik.http.routers.spy-pixel.tls=true"
+      - "traefik.http.routers.spy-pixel.tls.certresolver=production"
+      - "traefik.http.services.spy-pixel.loadbalancer.server.port=80"
+    volumes:
+      - ./app/:/app
+    working_dir: /app
+    container_name: spy-pixel-nginx
+    restart: unless-stopped
+
+networks:
+  traefik_proxy:
+    external: true
