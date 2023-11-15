@@ -17,3 +17,5 @@ steps:
 #      - cd ~/s-Docker/spy-pixel/
 #      - docker-compose ps
 #      - echo "accessed from drone at $(date)" >> drone-access.log
+    script_stop: true
+    debub: true
