@@ -3,6 +3,31 @@ type: docker
 name: build-and-deploy
 
 steps:
+  - name: build-and-push-tag
+    image: plugins/docker
+    settings:
+      repo: techbolt/spy-pixel
+      tags: ${DRONE_TAG}
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      event: tag
+
+  - name: build-and-push-latest
+    image: plugins/docker
+    settings:
+      repo: techbolt/spy-pixel
+      tags: latest
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      branch: [master]
+      event: [push, tag]
+
   - name: deploy
     image: appleboy/drone-ssh
     settings:
@@ -14,6 +39,8 @@ steps:
         from_secret: ssh_deploy_ssh_key
       script:
         - cd ~/s-Docker/spy-pixel/
+        - docker-compose pull
+        - docker-compose up -d
+        - sleep 2
         - docker-compose ps
         - echo "accessed from drone at $(date)" >> drone-access.log
-      script_stop: true
