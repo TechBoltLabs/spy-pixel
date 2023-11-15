@@ -62,7 +62,7 @@ def my_spy_pixel(source, identifier):
     os.makedirs(log_source_directory_name, exist_ok=True)
     if not os.path.exists(log_file_name_all):
         open(log_file_name_all, 'a').close()
-    if not os.path.exists(log_file_name_source):
+    if not os.path.exists(log_file_name_all):
         open(log_file_name_source, 'a').close()
     
 
