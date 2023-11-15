@@ -15,3 +15,4 @@ steps:
     script:
       - cd ~/s-Docker/spy-pixel/
       - docker-compose ps
+      - ls
