@@ -10,10 +10,8 @@ steps:
         from_secret: ssh_deploy_host
       username:
         from_secret: ssh_deploy_username
-      password:
-        from_secret: ssh_deploy_password
-#      key:
-#        from_secret: ssh_deploy_ssh_key
+      key:
+        from_secret: ssh_deploy_ssh_key
     script:
       - ls -lsha
 #      - cd ~/s-Docker/spy-pixel/
