@@ -3,11 +3,20 @@ type: docker
 name: build-and-deploy
 
 steps:
-  - name: build-and-push-tag
+  - name: build
+    image: plugins/docker
+    settings:
+      dry_run: true
+    when:
+      event: tag
+        
+  - name: build-and-push
     image: plugins/docker
     settings:
       repo: techbolt/spy-pixel
-      tags: ${DRONE_TAG}
+      tags: 
+        - ${DRONE_TAG}
+        - latest
       username:
         from_secret: docker_username
       password:
@@ -15,18 +24,18 @@ steps:
     when:
       event: tag
 
-  - name: build-and-push-latest
-    image: plugins/docker
-    settings:
-      repo: techbolt/spy-pixel
-      tags: latest
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-    when:
-      branch: [master]
-      event: [push, tag]
+#  - name: build-and-push-latest
+#    image: plugins/docker
+#    settings:
+#      repo: techbolt/spy-pixel
+#      tags: latest
+#      username:
+#        from_secret: docker_username
+#      password:
+#        from_secret: docker_password
+#    when:
+#      branch: [master]
+#      event: [push, tag]
 
   - name: deploy
     image: appleboy/drone-ssh
