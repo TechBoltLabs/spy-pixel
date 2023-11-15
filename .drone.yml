@@ -3,20 +3,20 @@ type: docker
 name: build-and-deploy
 
 steps:
-  - name: build
-    image: plugins/docker
-    settings:
-      dry_run: true
-    when:
-      event: tag
+#  - name: build
+#    image: plugins/docker
+#    settings:
+#      dry_run: true
+#    when:
+#      event: tag
         
   - name: build-and-push
     image: plugins/docker
     settings:
       repo: techbolt/spy-pixel
       tags: 
-        - ${DRONE_TAG}
         - latest
+        - ${DRONE_TAG}
       username:
         from_secret: docker_username
       password:
