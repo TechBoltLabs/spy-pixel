@@ -28,7 +28,7 @@ steps:
       repo: techbolt/spy-pixel
       tags: 
         - latest
-        - {DRONE_TAG}
+        - ${DRONE_TAG}
       use_cache: true
       username:
         from_secret: docker_username
@@ -36,7 +36,7 @@ steps:
         from_secret: docker_password
     when:
       branch: [master]
-#      event: [push, tag]
+      event: [tag]
 
   - name: deploy
     image: appleboy/drone-ssh
