@@ -1,0 +1,17 @@
+kind: pipeline
+type: docker
+name: build-and-deploy
+
+steps:
+  - name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: ssh_deploy_host
+      username:
+        from_secret: ssh_deploy_username
+      key:
+        from_secret: ssh_deploy_ssh_key
+    script:
+      - cd ~/s-Docker/spy-pixel/
+      - docker-compose ps
