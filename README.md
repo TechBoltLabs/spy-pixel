@@ -1,78 +1,41 @@
+[![Build Status](https://drone.huzi.rocks/api/badges/TechBoltLabs/spy-pixel/status.svg)](https://drone.huzi.rocks/TechBoltLabs/spy-pixel)
+
 # 🔍 Email Spy Pixel
-*A basic tracking pixel to track email opens.*
+*A basic tracking pixel to track email and website opens.* -- *Dockerized version of [collinsmc23's spy-pixel](https://github.com/collinsmc23/spy-pixel)*
 
 ## Overview
 Spy pixels, also commonly referred to as web beacons, are small artifacts implemented in applications to gather user information, which could include the User-Agent string, IP address, and if an email is opened etc. A basic method to collect this information is through the use of a 1x1 pixel with an embedded URL through a transparent PNG, GIF, JPG.
 
-This project uses Python Flask to serve a static web page with a `pixel.png` included in the `.../image` directory. When a user opens an email with the embedded spy pixel, the User-Agent string, timestamp, and IP Address are logged to the `spy_pixel_logs.txt` file.
+This project uses Python Flask to serve a static web page with a `pixel.png` included in the `app/images/` directory. When a user opens an email or website with the embedded spy pixel, some information is *(example below)* logged to the `spy_pixel_logs_all.log` *(all logs)* and `sources/{source}/spy_pixel_log.log` *(logs per source)* files.
+
+There are two variables, which are set through the url path of the pixel:
+ - source (like website, mail, ...)
+ - identifier (like website_a, mail_body_version_b, ...)
+
+```json
+{
+  "event": "Accessed",
+  "source": "website",
+  "identifier": "<some_identifier>",
+  "timestamp": "<some_timestamp>",
+  "user_agent": "<user_agent_string>",
+  "referrer": "<referrer>",
+  "accept_language": "de-DE,de;q=0.7",
+  "cookies": {},
+  "secure_connection": false,
+  "hostname": "<your_hostname>",
+  "ip_raw": "<ip_of_requestor>",
+  "ip_info": "<information_about_ip_address>"
+}
+```
 
 ## Deploy
 
-To deploy this web application, create a basic server using a VPS / cloud provider of choice. Used Amazon EC2 Ubuntu 20.04 LTS in this deployment.
+To deploy this application, use either the Dockerfile to build a docker image on your own or use the [image from docker hub](https://hub.docker.com/r/techbolt/spy-pixel).
+You can then bring the container up using the compose.yml file
 
-The following services need to be installed on cloud host, use your favorite package manager (`apt-get install`):
-- apache2
-- libapach2-mod-wsgi-py3
-- python-pip
-- python 3.8+
-
-This project assumes you are able to set up a basic Amazon EC2 instance. 
-
-### Step 1
-
-Provision a t2.micro Amazon EC2 instance on Ubuntu 20.04.
-
-💡 Make sure to generate or make note of the public/private key pair. A private key will be downloaded by default if you choose to generate one. Also ensure your security group (or cloud firewall) allows HTTP traffic (port 80).
-
-Take note of the Public EC2 DNS domain name (image below).
-
-![Create EC2 Instance](https://github.com/collinsmc23/spy-pixel/blob/main/images/Public%20DNS.png)
-
-### Step 2
-
-Log into the ubuntu instance with the private key using SSH. Alternatively, select the EC2 instance and use the online "Connect Profile."
-
-`ssh -i "my_private_key.pem" ubuntu@ec2-publicDNS.amazonaws.com`
-
-Clone this repository: `git clone https://github.com/collinsmc23/spy-pixel`
-
-![SSH Output](https://github.com/collinsmc23/spy-pixel/blob/main/images/SSH%20EC2.PNG)
-
-### Step 3
-
-Change directories into the `cd ~/spy-pixel/app`.
-
-Link the the app directory to site-root defined apache configuration `/var/www/html.`: `sudo ln -sT ~/app /var/www/html/app`.
-
-💡 To check if this works use `echo "Hello World!" > index.html`. You should see this message when navigating to ubuntu@ec2-publicDNS.amazonaws.com.
-
-### Step 4
-
-Add the following block below configuration to the `/etc/apache2/sites-enabled/000-default.conf`.
-
-```
-WSGIDaemonProcess flaskapp threads=5
-WSGIScriptAlias / /var/www/html/flaskapp/flaskapp.wsgi<Directory flaskapp>
-    WSGIProcessGroup flaskapp
-    WSGIApplicationGroup %{GLOBAL}
-    Order deny,allow
-    Allow from all
-</Directory>
-```
-![Apache Config](https://github.com/collinsmc23/spy-pixel/blob/main/images/Apache-config.png)
-
-*Image source: https://jqn.medium.com/deploy-a-flask-app-on-aws-ec2-1850ae4b0d41*
-### Step 5
-
-Restart the web service: `sudo service apache2 restart`.
-
-Go to `http://ec2-publicDNS.amazonaws.com/image` to see the 1x1 pixel.
-
-### Step 6
-
-Add this 1x1 pixel as img src HTML to a web page or email.
-
-`<img src ="Http://ec2-publicDNS.amazonaws.com/image" height=1 width=1>`
+If you want to use it in production mode, you should have a server, which is remotely available (such as a VPS).
+To use it a with domain, you can use the example compose file with traefik configuration.
 
 
 **Spy Away (For Learning Purposes only)**

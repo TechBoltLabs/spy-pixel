@@ -1,0 +1,22 @@
+version: '3'
+services:
+  spy-pixel:
+    image: techbolt/spy-pixel:latest # image and version
+    networks:
+      - traefik_proxy # traefik network
+    labels:
+      - "traefik.enable=true" # enable traefik for this container
+      - "traefik.http.routers.spy-pixel.rule=Host(`p.yourdomain.com`)" # define the domain, where this pixel will be hosted
+      - "traefik.http.routers.spy-pixel.entrypoints=web,websecure"
+      - "traefik.http.routers.spy-pixel.tls=true"
+      - "traefik.http.routers.spy-pixel.tls.certresolver=production" # set this to the name of your certresolver
+      - "traefik.http.services.spy-pixel.loadbalancer.server.port=80" # the port should match the one in the Dockerfile (CMD part)
+    volumes:
+      - ./app/:/app # mapping to the local directory
+    working_dir: /app 
+    container_name: spy-pixel # name for the container
+    restart: unless-stopped
+
+networks:
+  traefik_proxy:   # make sure you have created a network for your traefik-related stuff or rename to your network name
+    external: true 

@@ -2,3 +2,4 @@ app/__pycache__/
 app/logs/
 app/spy.gif
 drone-access.log
+compose.yml
