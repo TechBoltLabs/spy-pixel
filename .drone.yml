@@ -13,8 +13,7 @@ steps:
       key:
         from_secret: ssh_deploy_ssh_key
       script:
-        - echo "Hello"
-  #      - cd ~/s-Docker/spy-pixel/
-  #      - docker-compose ps
-  #      - echo "accessed from drone at $(date)" >> drone-access.log
+        - cd ~/s-Docker/spy-pixel/
+        - docker-compose ps
+        - echo "accessed from drone at $(date)" >> drone-access.log
       script_stop: true
