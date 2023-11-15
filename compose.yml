@@ -1,7 +1,7 @@
 version: '3'
 services:
   spy-pixel-flaskapp:
-    image: spy-pixel-flaskapp:v0.5
+    image: techbolt/spy-pixel:latest 
     networks:
       - traefik_proxy
     labels:
