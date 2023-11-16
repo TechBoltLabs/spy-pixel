@@ -40,6 +40,6 @@ To use it a with domain, you can use the example compose file with traefik confi
 
 **Spy Away (For Learning Purposes only)**
 
-![Spy Dwight](https://github.com/collinsmc23/spy-pixel/blob/main/images/spy.gif )
+![Spy Dwight](https://github.com/TechBoltLabs/spy-pixel/blob/master/app/images/spy.gif )
 
 
