@@ -1,4 +1,4 @@
-[![Build Status](https://drone.huzi.rocks/api/badges/TechBoltLabs/spy-pixel/status.svg)](https://drone.huzi.rocks/TechBoltLabs/spy-pixel)
+[![Build Status](https://drone.huzi.rocks/api/badges/TechBoltLabs/spy-pixel/status.svg?ref=refs/heads/master)](https://drone.huzi.rocks/TechBoltLabs/spy-pixel)
 
 # 🔍 Email Spy Pixel
 *A basic tracking pixel to track email and website opens.* -- *Dockerized version of [collinsmc23's spy-pixel](https://github.com/collinsmc23/spy-pixel)*

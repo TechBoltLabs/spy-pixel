@@ -30,6 +30,7 @@ steps:
       script:
         - cd ~/s-Docker/spy-pixel/
         - docker-compose pull
+        - docker-compose down
         - docker-compose up -d
         - sleep 2
         - docker-compose ps
