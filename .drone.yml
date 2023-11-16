@@ -35,3 +35,5 @@ steps:
         - sleep 2
         - docker-compose ps
         - echo "accessed from drone at $(date)" >> drone-access.log
+    when:
+      event: [tag]
