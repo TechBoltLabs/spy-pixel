@@ -1,18 +1,21 @@
-# app.py - version: v0.6.6
+# app.py - version: v0.7
+
+import datetime
+import json
+import os
+import urllib.request
 
 from flask import Flask, send_file, request
-import os
-import datetime
-import urllib.request
-import json
 
 app = Flask(__name__)
 
+
 # Serve a default page. This function is not required. Serving up a spy.gif for the homepage.
-#@app.route('/')
-#def my_function():
-#    spy_meme = "/app/images/spy.gif"
-#    return send_file(spy_meme, mimetype="image/gif")
+# @app.route('/')
+# def my_function():
+#     spy_meme = "/app/images/spy.gif"
+#     return send_file(spy_meme, mimetype="image/gif")
+
 
 @app.route('/image/<source>/<identifier>')
 def my_spy_pixel(source, identifier):
@@ -35,25 +38,25 @@ def my_spy_pixel(source, identifier):
     get_ip = request.headers.get('X-Real-IP', request.headers.get('X-Forwarded-For', request.remote_addr))
 
     # Lookup Geolocation of IP Address.
-    with urllib.request.urlopen("https://geolocation-db.com/jsonp/"+ get_ip) as url:
+    with urllib.request.urlopen("https://geolocation-db.com/jsonp/" + get_ip) as url:
         data = url.read().decode()
         data = data.split("(")[1].strip(")")
 
     # create log entry
     log_entry = {
-            "event": "Accessed",
-            "source": source,
-            "identifier": identifier,
-            "timestamp": timestamp,
-            "user_agent": user_agent,
-            "referrer": referrer,
-            "accept_language": accept_language,
-            "cookies": cookies,
-            "secure_connection": secure_connection,
-            "hostname": hostname,
-            "ip_raw": get_ip,
-            "ip_info": data
-            }
+        "event": "Accessed",
+        "source": source,
+        "identifier": identifier,
+        "timestamp": timestamp,
+        "user_agent": user_agent,
+        "referrer": referrer,
+        "accept_language": accept_language,
+        "cookies": cookies,
+        "secure_connection": secure_connection,
+        "hostname": hostname,
+        "ip_raw": get_ip,
+        "ip_info": data
+    }
 
     # define the names for the log file
     log_source_directory_name = f'/app/logs/sources/_{source}_'
@@ -66,15 +69,14 @@ def my_spy_pixel(source, identifier):
         open(log_file_name_all, 'a').close()
     if not os.path.exists(log_file_name_all):
         open(log_file_name_source, 'a').close()
-    
 
     # Write log to the log files
     # source specific log file
     with open(f'{log_source_directory_name}/{log_file_name_source}', 'a') as f:
-        f.write(json.dumps(log_entry)+ '\n')
+        f.write(json.dumps(log_entry) + '\n')
     # file for all logs
     with open(log_file_name_all, 'a') as f:
-        f.write(json.dumps(log_entry)+ '\n')
+        f.write(json.dumps(log_entry) + '\n')
 
     # Serve a transparent pixel image
     return send_file(filename, mimetype="image/png")
