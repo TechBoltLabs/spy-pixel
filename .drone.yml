@@ -2,6 +2,10 @@ kind: pipeline
 type: docker
 name: build-and-deploy
 
+trigger:
+  event:
+    - tag
+
 steps:
   - name: build-and-push-latest
     image: plugins/docker
@@ -15,8 +19,6 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
-    when:
-      event: [tag]
 
   - name: deploy
     image: appleboy/drone-ssh
@@ -35,5 +37,3 @@ steps:
         - sleep 2
         - docker-compose ps
         - echo "accessed from drone at $(date)" >> drone-access.log
-    when:
-      event: [tag]
