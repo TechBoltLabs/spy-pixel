@@ -53,3 +53,7 @@ To use it a with domain, you can use the example compose file with traefik confi
 ![Spy Dwight](https://github.com/TechBoltLabs/spy-pixel/blob/master/app/images/spy.gif )
 
 
+## Disclaimer
+
+This project is open-source and intended for educational and research purposes only. Users should ensure their use of this software complies with all relevant laws and ethical guidelines. The authors of this project are not responsible for any misuse or for any damage that may arise from the use of this software. It is the user's responsibility to use this software in a manner that respects privacy and adheres to applicable legal standards.
+
