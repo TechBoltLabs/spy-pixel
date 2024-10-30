@@ -2,8 +2,6 @@ version: '3'
 services:
   spy-pixel:
     image: techbolt/spy-pixel:latest # image and version
-    networks:
-      - traefik_proxy # traefik network
     ports:
       - 80:80
     volumes:
@@ -11,7 +9,3 @@ services:
     working_dir: /app 
     container_name: spy-pixel # name for the container
     restart: unless-stopped
-
-networks:
-  traefik_proxy:   # make sure you have created a network for your traefik-related stuff or rename to your network name
-    external: true 
