@@ -1,0 +1,32 @@
+version: '3'
+services:
+  spy-pixel:
+    image: techbolt/spy-pixel:latest # image and version
+    ports:
+      - 81:80
+    environment:
+      DB_HOST: mariadb
+      DB_NAME: spy_pixel
+      DB_USER: spy_pixel
+      DB_PASSWORD: spy_pixel
+      NO_DB_LOGGING: False # optional - considered false as long as it's not 'True' or not present
+    volumes:
+      - ./app/:/app # mapping to the local directory
+    working_dir: /app 
+    container_name: spy-pixel # name for the container
+    restart: unless-stopped
+
+  mariadb:
+    image: lscr.io/linuxserver/mariadb:latest
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Etc/UTC
+      MYSQL_ROOT_PASSWORD: ROOT_ACCESS_PASSWORD
+      MYSQL_DATABASE: spy_pixel
+      MYSQL_USER: spy_pixel
+      MYSQL_PASSWORD: spy_pixel
+    volumes:
+      - /path/to/mariadb/config:/config
+    container_name: spy_pixel-mariadb
+    restart: unless-stopped
