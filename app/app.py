@@ -178,6 +178,8 @@ def add_db_log_entry(event, source, identifier, timestamp, user_agent, referrer,
         print("Adding log entry to db ...")
         # execute the prepared statement
         cursor.execute(sql_query, query_data)
+        # commit the changes so the log entry actually persists
+        db.commit()
         # just a console message
         print("Log entry added to db")
 
